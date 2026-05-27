@@ -1,0 +1,9 @@
+fastapi==0.110.0
+uvicorn==0.28.0
+sqlalchemy==2.0.28
+pandas==2.2.1
+numpy==1.26.4
+scikit-learn==1.4.1.post1
+passlib[bcrypt]==1.7.4
+pyjwt==2.8.0
+python-multipart==0.0.9
