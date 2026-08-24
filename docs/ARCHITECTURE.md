@@ -58,7 +58,7 @@ graph TD
 
 MarketPulse implements a strict 3-tier multi-tenancy hierarchy:
 
-$$\text{Organization} \longrightarrow \text{Workspace} \longrightarrow \text{Users \& Resources}$$
+`Organization` → `Workspace` → `Users & Resources`
 
 ```mermaid
 erDiagram

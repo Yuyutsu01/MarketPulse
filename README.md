@@ -204,15 +204,14 @@ flowchart TD
 ## Enterprise Engineering Foundations
 
 ### Multi-Tenancy & Governance
-Implements strict 3-tier tenant hierarchy isolation:
-$$\text{Organization} \longrightarrow \text{Workspace} \longrightarrow \text{Users \& Resources}$$
+`Organization` → `Workspace` → `Users & Resources`
 * Compound database indexing on `(organization_id, workspace_id)`.
 * Role-Based Access Control (RBAC): `OWNER`, `ADMIN`, `ANALYST`, `VIEWER`.
 
 ### Data Quality & Ingestion Engine
 Multi-stage automated validation pipeline for CSV/Excel data uploads:
 * **Bound Validations**: Non-negative spend, clicks, impressions, and conversions.
-* **Funnel Integrity**: Ensures $\text{clicks} \le \text{impressions}$ and $\text{conversions} \le \text{clicks}$.
+* **Funnel Integrity**: Ensures `clicks <= impressions` and `conversions <= clicks`.
 * **Data Lineage**: Logs data quality reports containing valid rows, rejected records, and schema issues to `data_quality_reports`.
 
 ### Security Implementation
