@@ -2,7 +2,7 @@
   <img src="assets/MarketPulse.png" alt="MarketPulse AI Logo" width="220" />
 </p>
 
-# 📊 MarketPulse AI Enterprise Platform
+# MarketPulse AI Enterprise Platform
 
 An enterprise-grade Marketing Intelligence, Attribution, Experimentation, Prediction, and Budget Optimization Platform powered by PostgreSQL, Qdrant Vector Intelligence, Scikit-Learn ML, Redis/Celery Async Workers, and React SPA.
 
@@ -18,41 +18,41 @@ An enterprise-grade Marketing Intelligence, Attribution, Experimentation, Predic
 
 ---
 
-## 📋 Table of Contents
+## Table of Contents
 
-- [🎯 Platform Overview](#-platform-overview)
-- [📚 Documentation Directory](#-documentation-directory)
-- [🚀 Quick Start with Docker](#-quick-start-with-docker-recommended)
-- [🏛️ Enterprise System Architecture](#️-enterprise-system-architecture)
-- [✨ Enterprise Core Features](#-enterprise-core-features)
-- [🔍 REST API Reference](#-rest-api-reference)
-- [🛠️ Local Setup (Without Docker)](#️-local-setup-without-docker)
-- [🧪 Automated Verification & Test Suite](#-automated-verification--test-suite)
-- [📄 License](#-license)
+- [Platform Overview](#platform-overview)
+- [Documentation Directory](#documentation-directory)
+- [Quick Start with Docker](#quick-start-with-docker-recommended)
+- [Enterprise System Architecture](#enterprise-system-architecture)
+- [Enterprise Core Features](#enterprise-core-features)
+- [REST API Reference](#rest-api-reference)
+- [Local Setup](#local-setup-without-docker)
+- [Automated Verification & Test Suite](#automated-verification--test-suite)
+- [License](#license)
 
 ---
 
-## 🎯 Platform Overview
+## Platform Overview
 
 **MarketPulse AI** transforms marketing operations from static analytics into a **continuous decision-intelligence platform**. Built for growth teams, performance marketers, and enterprise organizations, MarketPulse provides multi-tenant campaign management, temporal ML performance predictions, SLSQP budget allocation optimization, multi-touch channel attribution, statistical A/B experimentation, and tenant-isolated semantic campaign vector search.
 
 ---
 
-## 📚 Documentation Directory
+## Documentation Directory
 
-Comprehensive documentation is available in the [`docs/`](docs/) directory:
+Comprehensive technical documentation is available in the [`docs/`](docs/) directory:
 
 | Document | Link | Description |
 | :--- | :--- | :--- |
-| 📊 **Project Status & Roadmap** | [`docs/PROJECT_STATUS.md`](docs/PROJECT_STATUS.md) | Details of completed features and upcoming roadmap items. |
-| 🏛️ **System Architecture** | [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) | C4 diagram, multi-tenancy hierarchy, PostgreSQL ERD, and decision engine algorithms. |
-| 📡 **REST API Specification** | [`docs/API_DOCUMENTATION.md`](docs/API_DOCUMENTATION.md) | Full endpoint parameters, schemas, authentication, and JSON response payloads. |
-| 🚀 **Production Deployment Guide** | [`docs/DEPLOYMENT_GUIDE.md`](docs/DEPLOYMENT_GUIDE.md) | Docker Compose, environment variables, Nginx SSL, and backup guides. |
-| 🛠️ **Developer Guide** | [`docs/DEVELOPER_GUIDE.md`](docs/DEVELOPER_GUIDE.md) | Local setup, repository structure, test verification suite, and frontend workflow. |
+| **Project Status & Roadmap** | [`docs/PROJECT_STATUS.md`](docs/PROJECT_STATUS.md) | Details of completed features and upcoming roadmap items. |
+| **System Architecture** | [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) | C4 diagram, multi-tenancy hierarchy, PostgreSQL ERD, and decision engine algorithms. |
+| **REST API Specification** | [`docs/API_DOCUMENTATION.md`](docs/API_DOCUMENTATION.md) | Full endpoint parameters, schemas, authentication, and JSON response payloads. |
+| **Production Deployment Guide** | [`docs/DEPLOYMENT_GUIDE.md`](docs/DEPLOYMENT_GUIDE.md) | Docker Compose, environment variables, Nginx SSL, and backup guides. |
+| **Developer Guide** | [`docs/DEVELOPER_GUIDE.md`](docs/DEVELOPER_GUIDE.md) | Local setup, repository structure, test verification suite, and frontend workflow. |
 
 ---
 
-## 🚀 Quick Start with Docker (Recommended)
+## Quick Start with Docker (Recommended)
 
 Launch the complete 6-container enterprise stack (`PostgreSQL 16`, `Redis 7`, `Qdrant Vector DB`, `FastAPI Backend`, `Celery Worker`, `React Frontend`) with a single command:
 
@@ -69,7 +69,7 @@ docker compose up -d
 
 ---
 
-## 🏛️ Enterprise System Architecture
+## Enterprise System Architecture
 
 ```mermaid
 graph TD
@@ -111,25 +111,25 @@ graph TD
 
 ---
 
-## ✨ Enterprise Core Features
+## Enterprise Core Features
 
 | Feature | Description | Technical Implementation |
 | :--- | :--- | :--- |
-| **🏢 Multi-Tenancy & Governance** | Strict organization and workspace isolation (`Organization -> Workspace -> Users/Resources`) with RBAC role enforcement (`OWNER`, `ADMIN`, `ANALYST`, `VIEWER`). | PostgreSQL Compound Indexes & Pydantic Schemas |
-| **🧠 Temporal ML Platform** | Predicts CTR, Conversion Rate, and ROI with temporal time-series splitting, baseline comparison gates, and 90% ensemble prediction intervals. | Scikit-Learn (Random Forest Regressors) |
-| **🔍 Qdrant Vector Intelligence** | Semantic campaign similarity search indexing 384-dimensional dense vectors with strict workspace payload metadata isolation. | Qdrant Client Vector DB & Cosine Distance |
-| **📐 Multi-Touch Attribution** | Distributes revenue credit across touchpoint channels using First Touch, Last Touch, Linear, Time Decay, and Position-Based (40-20-40) models. | MultiTouchAttributionEngine |
-| **🧪 Statistical A/B Testing** | Evaluates Control vs Treatment campaign variants with percentage lift, Welch's t-statistic, p-value, and 95% confidence intervals. | SciPy Statistical Engine |
-| **💰 SLSQP Budget Optimization** | Solves optimal spend allocation across marketing channels to maximize expected ROI under total budget and channel spend caps. | SciPy Sequential Least Squares Programming |
-| **⚡ Async Queue Execution** | Asynchronous CSV data ingestion, validation auditing, data lineage reporting, and background ML retraining. | Redis 7 & Celery Workers |
-| **🔐 Security & Audit Logging** | Bcrypt password hashing, JWT refresh token rotation, CORS whitelist configuration, and immutable security audit logs. | Bcrypt & PyJWT & AuditLog Schema |
+| **Multi-Tenancy & Governance** | Strict organization and workspace isolation (`Organization -> Workspace -> Users/Resources`) with RBAC role enforcement (`OWNER`, `ADMIN`, `ANALYST`, `VIEWER`). | PostgreSQL Compound Indexes & Pydantic Schemas |
+| **Temporal ML Platform** | Predicts CTR, Conversion Rate, and ROI with temporal time-series splitting, baseline comparison gates, and 90% ensemble prediction intervals. | Scikit-Learn (Random Forest Regressors) |
+| **Qdrant Vector Intelligence** | Semantic campaign similarity search indexing 384-dimensional dense vectors with strict workspace payload metadata isolation. | Qdrant Client Vector DB & Cosine Distance |
+| **Multi-Touch Attribution** | Distributes revenue credit across touchpoint channels using First Touch, Last Touch, Linear, Time Decay, and Position-Based (40-20-40) models. | MultiTouchAttributionEngine |
+| **Statistical A/B Testing** | Evaluates Control vs Treatment campaign variants with percentage lift, Welch's t-statistic, p-value, and 95% confidence intervals. | SciPy Statistical Engine |
+| **SLSQP Budget Optimization** | Solves optimal spend allocation across marketing channels to maximize expected ROI under total budget and channel spend caps. | SciPy Sequential Least Squares Programming |
+| **Async Queue Execution** | Asynchronous CSV data ingestion, validation auditing, data lineage reporting, and background ML retraining. | Redis 7 & Celery Workers |
+| **Security & Audit Logging** | Bcrypt password hashing, JWT refresh token rotation, CORS whitelist configuration, and immutable security audit logs. | Bcrypt & PyJWT & AuditLog Schema |
 
 ---
 
-## 🔍 REST API Reference
+## REST API Reference
 
 <details>
-<summary><b>🔐 Authentication & Multi-Tenancy (`/api/auth`)</b></summary>
+<summary><b>Authentication & Multi-Tenancy (`/api/auth`)</b></summary>
 
 * `POST /api/auth/register` - Registers analyst, provisions Organization & Workspace, and seeds ~900 sample campaigns.
 * `POST /api/auth/login` - Authenticates credentials and returns JWT Access & Refresh Tokens.
@@ -137,7 +137,7 @@ graph TD
 </details>
 
 <details>
-<summary><b>📊 Analytics & Aggregations (`/api/analytics`)</b></summary>
+<summary><b>Analytics & Aggregations (`/api/analytics`)</b></summary>
 
 * `GET /api/analytics/kpis` - Fetches high-performance database-side SQL aggregations for ROI, CTR, CPC, CAC, CPM, and total spend/conversions.
 * `GET /api/analytics/charts` - Returns timeseries datasets, channel share ratios, and platform comparison datasets.
@@ -145,7 +145,7 @@ graph TD
 </details>
 
 <details>
-<summary><b>🧠 Predictive ML Engine (`/api/predict`)</b></summary>
+<summary><b>Predictive ML Engine (`/api/predict`)</b></summary>
 
 * `POST /api/predict/` - Simulates campaign performance parameters and returns predicted CTR, CVR, ROI, 90% uncertainty intervals, and a normalized Success Score.
 * `GET /api/predict/history` - Returns recent prediction simulation history.
@@ -153,7 +153,7 @@ graph TD
 </details>
 
 <details>
-<summary><b>🏛️ Enterprise Decision Engine (`/api/v1`)</b></summary>
+<summary><b>Enterprise Decision Engine (`/api/v1`)</b></summary>
 
 * `POST /api/v1/attribution` - Computes channel revenue credit using 5 attribution models.
 * `POST /api/v1/experimentation` - Evaluates A/B test variant statistical lift and p-values.
@@ -164,7 +164,7 @@ graph TD
 
 ---
 
-## 🛠️ Local Setup (Without Docker)
+## Local Setup (Without Docker)
 
 ### Prerequisites
 - **Python 3.11+** installed.
@@ -203,7 +203,7 @@ graph TD
 
 ---
 
-## 🧪 Automated Verification & Test Suite
+## Automated Verification & Test Suite
 
 To verify database schema creation, multi-tenant workspace provisioning, bcrypt authentication, analytics aggregations, Random Forest ML training, and decision engine calculations:
 
@@ -214,6 +214,6 @@ python test_backend.py
 
 ---
 
-## 📄 License
+## License
 
 Distributed under the MIT License. See [LICENSE](LICENSE) for details.
