@@ -39,7 +39,6 @@
 - [Quick Start with Docker](#quick-start-with-docker)
 - [Local Development Setup](#local-development-setup)
 - [Automated Verification & Testing](#automated-verification--testing)
-- [Project Status](#project-status)
 - [Documentation Directory](#documentation-directory)
 - [License](#license)
 
@@ -358,36 +357,15 @@ python test_backend.py
 
 ---
 
-## Project Status
-
-| Capability | Status | Implementation Details |
-| :--- | :---: | :--- |
-| **Multi-Tenancy & RBAC** | 🟢 Implemented | PostgreSQL 3-tier hierarchy (`Organization -> Workspace -> User`) |
-| **SQL Analytics Engine** | 🟢 Implemented | Database-side GroupBy aggregations for KPIs & charts |
-| **Data Quality Engine** | 🟢 Implemented | Multi-stage schema validation & data lineage tracking |
-| **Predictive ML Platform** | 🟢 Implemented | Temporal Random Forest regressors with 90% uncertainty bounds |
-| **Multi-Touch Attribution** | 🟢 Implemented | First, Last, Linear, Time Decay, Position-Based (40-20-40) |
-| **A/B Experimentation** | 🟢 Implemented | Lift analysis, Welch's t-test, p-value, 95% confidence intervals |
-| **SLSQP Budget Optimizer** | 🟢 Implemented | SciPy bounded optimization under spend caps |
-| **Qdrant Semantic Search** | 🟢 Implemented | 384D vector embeddings with workspace payload filtering |
-| **Redis / Celery Async** | 🟢 Implemented | Async CSV processing & background model retraining |
-| **Docker Compose Stack** | 🟢 Implemented | 6-container production stack |
-| **Live Ad API Connectors** | ⚪ Planned | Direct OAuth sync with Meta Ads & Google Ads API |
-| **Enterprise SSO / SAML** | ⚪ Planned | Single Sign-On via Okta / Azure AD |
-
-For detailed roadmap tracking, see [`docs/PROJECT_STATUS.md`](docs/PROJECT_STATUS.md).
-
----
-
 ## Documentation Directory
 
-Detailed technical references are located in the [`docs/`](docs/) directory:
+Detailed technical references and implementation guides are located in the [`docs/`](docs/) directory:
 
-* 📊 **[Project Status & Roadmap](docs/PROJECT_STATUS.md)**: Implementation progress and planned features.
-* 🏛️ **[System Architecture](docs/ARCHITECTURE.md)**: Database ERD, C4 diagrams, and mathematical specifications.
-* 📡 **[REST API Specification](docs/API_DOCUMENTATION.md)**: Full REST API endpoint reference and schemas.
-* 🚀 **[Production Deployment Guide](docs/DEPLOYMENT_GUIDE.md)**: Production deployment, Docker Compose, Nginx SSL.
-* 🛠️ **[Developer Guide](docs/DEVELOPER_GUIDE.md)**: Local developer setup, test suite, and repo structure.
+* **[Project Status & Roadmap](docs/PROJECT_STATUS.md)**: Implementation matrix of completed platform capabilities and upcoming roadmap items.
+* **[System Architecture](docs/ARCHITECTURE.md)**: Multi-tenant database ERD, C4 diagrams, decision engine algorithms, and vector layers.
+* **[REST API Specification](docs/API_DOCUMENTATION.md)**: Full REST API endpoint specifications, parameters, and response schemas.
+* **[Production Deployment Guide](docs/DEPLOYMENT_GUIDE.md)**: Docker Compose orchestration, environment configuration, and Nginx setup.
+* **[Developer Guide](docs/DEVELOPER_GUIDE.md)**: Local development setup, automated test suite commands, and repository structure.
 
 ---
 
