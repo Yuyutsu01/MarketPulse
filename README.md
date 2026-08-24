@@ -18,9 +18,16 @@ An enterprise-grade Marketing Intelligence, Attribution, Experimentation, Predic
 
 ---
 
-## 🎯 Platform Overview
+---
 
-**MarketPulse AI** transforms marketing operations from static analytics into a **continuous decision-intelligence platform**. Built for growth teams, performance marketers, and enterprise organizations, MarketPulse provides multi-tenant campaign management, temporal ML performance predictions, SLSQP budget allocation optimization, multi-touch channel attribution, statistical A/B experimentation, and tenant-isolated semantic campaign vector search.
+## 📚 Documentation Directory
+
+Essential technical documentation is available in the [`docs/`](docs/) directory:
+
+* 🏛️ **[System Architecture](docs/ARCHITECTURE.md)** — C4 diagram, multi-tenancy hierarchy, PostgreSQL ERD, and decision engine algorithms.
+* 📡 **[REST API Specification](docs/API_DOCUMENTATION.md)** — Full endpoint parameters, schemas, authentication, and JSON response payloads.
+* 🚀 **[Production Deployment Guide](docs/DEPLOYMENT_GUIDE.md)** — Docker Compose, environment variables, Nginx SSL, and backup guides.
+* 🛠️ **[Developer Guide](docs/DEVELOPER_GUIDE.md)** — Local setup, repository structure, test verification suite, and frontend workflow.
 
 ---
 
