@@ -1,188 +1,155 @@
-# 📊 MarketPulse AI
+<p align="center">
+  <img src="assets/MarketPulse.png" alt="MarketPulse AI Logo" width="220" />
+</p>
 
-An AI-powered marketing analytics platform for campaign tracking, audience insights, and performance prediction using data-driven machine learning models and interactive dashboards.
+# 📊 MarketPulse AI Enterprise Platform
+
+An enterprise-grade Marketing Intelligence, Attribution, Experimentation, Prediction, and Budget Optimization Platform powered by PostgreSQL, Qdrant Vector Intelligence, Scikit-Learn ML, Redis/Celery Async Workers, and React SPA.
 
 [![FastAPI](https://img.shields.io/badge/FastAPI-005571?style=for-the-badge&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
 [![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](https://react.dev/)
-[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
+[![Qdrant](https://img.shields.io/badge/Qdrant_Vector_DB-dc2626?style=for-the-badge&logo=qdrant&logoColor=white)](https://qdrant.tech/)
+[![Redis](https://img.shields.io/badge/Redis-DC382D?style=for-the-badge&logo=redis&logoColor=white)](https://redis.io/)
+[![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)](https://www.docker.com/)
 [![Scikit-Learn](https://img.shields.io/badge/scikit--learn-%23F7931E.svg?style=for-the-badge&logo=scikit-learn&logoColor=white)](https://scikit-learn.org/)
-[![SQLite](https://img.shields.io/badge/SQLite-07405E?style=for-the-badge&logo=sqlite&logoColor=white)](https://sqlite.org/)
-[![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white)](https://vite.dev/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](LICENSE)
 
 ---
 
-## 🎯 Project Overview
+## 🎯 Platform Overview
 
-MarketPulse is a full-stack marketing analytics platform designed to empower digital marketers and analysts with data-driven decision-making tools. By integrating historical campaign tracking with a machine learning engine, MarketPulse allows users to run simulated campaigns and predict key metrics (CTR, Conversion Rate, ROI) alongside a tailored success score before committing real ad spend.
+**MarketPulse AI** transforms marketing operations from static analytics into a **continuous decision-intelligence platform**. Built for growth teams, performance marketers, and enterprise organizations, MarketPulse provides multi-tenant campaign management, temporal ML performance predictions, SLSQP budget allocation optimization, multi-touch channel attribution, statistical A/B experimentation, and tenant-isolated semantic campaign vector search.
 
 ---
 
-## 🏛️ System Architecture
+## 🚀 Quick Start with Docker (Recommended)
 
-The following diagram illustrates how the frontend React SPA, backend FastAPI service, and SQLite database interact with the machine learning components:
+Launch the complete 6-container enterprise stack (`PostgreSQL 16`, `Redis 7`, `Qdrant Vector DB`, `FastAPI Backend`, `Celery Worker`, `React Frontend`) with a single command:
+
+```bash
+docker compose up -d --build
+```
+
+### Access Platform Endpoints
+
+* **Frontend SPA Workspace**: [`http://localhost:8080`](http://localhost:8080)
+* **FastAPI Enterprise API**: [`http://localhost:8001`](http://localhost:8001)
+* **OpenAPI Interactive Docs**: [`http://localhost:8001/docs`](http://localhost:8001/docs)
+* **Qdrant Vector Dashboard**: [`http://localhost:6335/dashboard`](http://localhost:6335/dashboard)
+
+---
+
+## 🏛️ Enterprise System Architecture
 
 ```mermaid
 graph TD
-    %% Frontend Components
-    subgraph Frontend [React SPA client]
-        A[Dashboard & Charts] -->|Requests API| B(Axios Service)
-        C[ML Predictor Form] -->|Submits Parameters| B
-        D[CSV Campaign Upload] -->|Uploads CSV/XLSX| B
+    %% Client & Gateway
+    subgraph ClientLayer [React SPA Frontend Workspace]
+        A[Dashboard & Analytics] -->|Axios REST / Bearer JWT| B(Vite Proxy / Nginx)
+        C[ML Predictor & Sandbox] --> B
+        D[Attribution & Budget Optimizer] --> B
+        E[Semantic Vector Search UI] --> B
     end
 
-    %% Backend Components
-    subgraph Backend [FastAPI Application]
-        B -->|JWT Auth Header| E[FastAPI Routers]
-        E -->|Auth Routes| F[Auth Router]
-        E -->|Campaign Ingestion| G[Campaign Router]
-        E -->|Analytics & Insights| H[Analytics Router]
-        E -->|ML Simulator| I[Predict Router]
-        
-        G -->|Triggers Background Job| J[ML Model Trainer]
+    %% Application Server
+    subgraph BackendLayer [FastAPI Enterprise Application Engine]
+        B --> F[API Routers & Auth Middleware]
+        F --> G[Auth & Multi-Tenant Router]
+        F --> H[Analytics & Aggregations Router]
+        F --> I[ML Prediction Sandbox Router]
+        F --> J[Enterprise Decision Router]
+
+        J -->|Attribution Calculations| K[Multi-Touch Attribution Engine]
+        J -->|A/B Lift & Hypothesis Testing| L[Experimentation Engine]
+        J -->|SLSQP Constrained Optimization| M[Budget Optimization Engine]
+        J -->|Tenant-Isolated Query| N[Qdrant Semantic Intelligence]
     end
 
-    %% Storage & ML Layers
-    subgraph Data & ML Engines [Storage & Machine Learning]
-        F <-->|Query & Store| K[(SQLite Database)]
-        G <-->|Bulk Insert & Read| K
-        H <-->|Aggregations & Analytics| K
-        I <-->|Store Prediction History| K
+    %% Storage & Worker Async Infrastructure
+    subgraph Infrastructure [Data, Async & Vector Platform]
+        G <-->|Multi-Tenant Isolated Operations| O[(PostgreSQL 16 Database)]
+        H <-->|SQL GroupBy Aggregations| O
         
-        J -->|Fetches History| K
-        J -->|Trains & Serializes| L[Random Forest Models]
-        I -->|Loads Bundle & Infers| L
+        F -->|Dispatch Async Ingestion & Training| P((Redis 7 Job Queue))
+        P <--> Q[Celery Async Workers]
+        Q <-->|Bulk Insert & Lineage Reports| O
+        Q <-->|Train & Serialize Models| R[Scikit-Learn Model Registry]
+        
+        N <-->|384D Dense Vector Indexing| S[(Qdrant Vector Engine)]
     end
 ```
 
 ---
 
-## ✨ Key Features
+## ✨ Enterprise Core Features
 
-| Feature | Description | Tech Highlight |
+| Feature | Description | Technical Implementation |
 | :--- | :--- | :--- |
-| **📊 Real-time KPIs** | Instant calculations of marketing health metrics including ROI, CTR, CPC, CAC, CPM, and total conversions. | Pandas & FastAPI |
-| **📈 Dynamic Data Charts** | Timeseries trend lines, platform share breakdowns, and cross-channel efficiency comparison charts. | Recharts & Tailwind CSS |
-| **🧠 ML Campaign Sandbox** | Simulates new campaign runs by predicting Click-Through Rate (CTR), Conversion Rate (CVR), Return on Investment (ROI), and a normalized Success Score. | Scikit-Learn (Random Forest) |
-| **🎯 Audience Insights** | Deep demographic breakdowns by target device, audience age group, geography, and optimal hours. | SQL Aggregations & SQLite |
-| **⚡ Intelligent Seeding** | Creates ~900 realistic campaign records automatically upon user registration for an immediate full platform experience. | Seed Ingestion Engine |
-| **📂 Bulk CSV Ingestion** | Upload bulk campaigns in CSV/Excel formats with automated data validation, error handling, and background model retraining. | Pandas & FastAPI Background Tasks |
-| **🔐 Secure Auth** | Complete user onboarding, password hashing, and token-based API request protection. | Passlib (Bcrypt) & PyJWT |
+| **🏢 Multi-Tenancy & Governance** | Strict organization and workspace isolation (`Organization -> Workspace -> Users/Resources`) with RBAC role enforcement (`OWNER`, `ADMIN`, `ANALYST`, `VIEWER`). | PostgreSQL Compound Indexes & Pydantic Schemas |
+| **🧠 Temporal ML Platform** | Predicts CTR, Conversion Rate, and ROI with temporal time-series splitting, baseline comparison gates, and 90% ensemble prediction intervals. | Scikit-Learn (Random Forest Regressors) |
+| **🔍 Qdrant Vector Intelligence** | Semantic campaign similarity search indexing 384-dimensional dense vectors with strict workspace payload metadata isolation. | Qdrant Client Vector DB & Cosine Distance |
+| **📐 Multi-Touch Attribution** | Distributes revenue credit across touchpoint channels using First Touch, Last Touch, Linear, Time Decay, and Position-Based (40-20-40) models. | MultiTouchAttributionEngine |
+| **🧪 Statistical A/B Testing** | Evaluates Control vs Treatment campaign variants with percentage lift, Welch's t-statistic, p-value, and 95% confidence intervals. | SciPy Statistical Engine |
+| **💰 SLSQP Budget Optimization** | Solves optimal spend allocation across marketing channels to maximize expected ROI under total budget and channel spend caps. | SciPy Sequential Least Squares Programming |
+| **⚡ Async Queue Execution** | Asynchronous CSV data ingestion, validation auditing, data lineage reporting, and background ML retraining. | Redis 7 & Celery Workers |
+| **🔐 Security & Audit Logging** | Bcrypt password hashing, JWT refresh token rotation, CORS whitelist configuration, and immutable security audit logs. | Bcrypt & PyJWT & AuditLog Schema |
 
 ---
 
-## 🔍 System Deep Dive
+## 🔍 REST API Reference
 
 <details>
-<summary><b>🚀 REST API Reference</b></summary>
+<summary><b>🔐 Authentication & Multi-Tenancy (`/api/auth`)</b></summary>
 
-### Authentication
-* `POST /api/auth/register` - Registers a new analyst and triggers the background seeding of ~900 sample campaigns.
-* `POST /api/auth/login` - Authenticates credentials and returns a JWT access token.
-* `GET /api/auth/me` - Resolves details of the currently logged-in user.
-
-### Campaigns Management
-* `GET /api/campaigns/` - Returns all historical campaigns uploaded by the authenticated user.
-* `GET /api/campaigns/template` - Downloads a pre-formatted sample CSV template for bulk uploads.
-* `POST /api/campaigns/upload` - Ingests a CSV/Excel file, runs data checks, updates database, and initiates model retraining.
-* `GET /api/campaigns/{id}` - Returns detail for a specific campaign.
-* `DELETE /api/campaigns/{id}` - Deletes a campaign from database.
-
-### Analytics & Reporting
-* `GET /api/analytics/kpis` - Fetches aggregated dashboard metrics (ROI, CTR, CPC, CAC, CPM, conversions).
-* `GET /api/analytics/charts` - Returns timeseries data, platform share ratios, and comparison values for charts.
-* `GET /api/analytics/audience` - Retrieves breakdowns of device, age, geography, and hour metrics.
-
-### AI Prediction Sandbox
-* `POST /api/predict/` - Simulates a campaign by sending a set of features. Evaluates them against the user's trained ML models and returns predicted metrics.
-* `GET /api/predict/history` - Returns the last 15 prediction simulations.
-* `GET /api/predict/recommendations` - Generates account-wide optimization insights based on historical records.
+* `POST /api/auth/register` - Registers analyst, provisions Organization & Workspace, and seeds ~900 sample campaigns.
+* `POST /api/auth/login` - Authenticates credentials and returns JWT Access & Refresh Tokens.
+* `GET /api/auth/me` - Resolves authenticated user details and active organization context.
 </details>
 
 <details>
-<summary><b>💾 Database Schema</b></summary>
+<summary><b>📊 Analytics & Aggregations (`/api/analytics`)</b></summary>
 
-The project uses a relational SQLite database structure:
-
-### 1. `users` Table
-- `id` (INTEGER, PK) - Primary key.
-- `name` (VARCHAR) - Full name of the user.
-- `email` (VARCHAR, Unique) - Login email.
-- `hashed_password` (VARCHAR) - Bcrypt hashed password.
-- `created_at` (DATETIME) - Creation timestamp.
-
-### 2. `campaigns` Table
-- `id` (INTEGER, PK) - Primary key.
-- `user_id` (INTEGER, FK -> users) - Owner reference.
-- `campaign_name` (VARCHAR) - Name of the campaign.
-- `platform` (VARCHAR) - Facebook, Google Ads, Instagram, TikTok, YouTube.
-- `spend` (FLOAT) - Campaign spend.
-- `clicks` (INTEGER) - Click-throughs.
-- `impressions` (INTEGER) - Total ad views.
-- `conversions` (INTEGER) - Conversion events.
-- `revenue` (FLOAT, Nullable) - Attributed revenue.
-- `device` (VARCHAR) - Mobile, Desktop, Tablet.
-- `audience_age` (VARCHAR) - 18-24, 25-34, 35-44, 45-54, 55+.
-- `geography` (VARCHAR) - Geography code (US, UK, CA, etc.).
-- `hour` (INTEGER) - Ad scheduled hour (0-23).
-- `date` (DATE) - Performance date.
-
-### 3. `predictions` Table
-- `id` (INTEGER, PK) - Primary key.
-- `user_id` (INTEGER, FK -> users) - Owner reference.
-- `campaign_name` (VARCHAR) - Title of simulated campaign.
-- `platform` (VARCHAR) - Target platform.
-- `spend` (FLOAT) - Budget configuration.
-- `device`, `audience_age`, `geography`, `hour` - Simulated targeting parameters.
-- `predicted_roi` (FLOAT) - Estimated ROI percentage.
-- `success_score` (FLOAT) - Normalized rating of success (0 - 100).
-- `expected_conversion_rate` (FLOAT) - Estimated conversion percentage.
-- `recommendations` (VARCHAR) - JSON string containing real-time optimization warnings and tips.
+* `GET /api/analytics/kpis` - Fetches high-performance database-side SQL aggregations for ROI, CTR, CPC, CAC, CPM, and total spend/conversions.
+* `GET /api/analytics/charts` - Returns timeseries datasets, channel share ratios, and platform comparison datasets.
+* `GET /api/analytics/audience` - Retrieves breakdowns for device, age co-hort, geography, and hourly performance.
 </details>
 
 <details>
-<summary><b>🧠 Predictive ML Engine & Success Scoring</b></summary>
+<summary><b>🧠 Predictive ML Engine (`/api/predict`)</b></summary>
 
-MarketPulse utilizes Python's **Scikit-Learn** library to train user-specific machine learning models. 
+* `POST /api/predict/` - Simulates campaign performance parameters and returns predicted CTR, CVR, ROI, 90% uncertainty intervals, and a normalized Success Score.
+* `GET /api/predict/history` - Returns recent prediction simulation history.
+* `GET /api/predict/recommendations` - Generates account optimization insights.
+</details>
 
-### Model Pipeline
-1. **Feature Engineering**: Features include categorical inputs (`platform`, `device`, `audience_age`, `geography`) and numerical inputs (`hour`, `spend`).
-2. **Preprocessing**: The categorical features undergo **One-Hot Encoding**, while numerical features are scaled using **StandardScaler** within a reusable pipeline.
-3. **Random Forest Regression**: The backend trains **three independent Random Forest Regressors** per user to predict:
-   - click-through rate ($CTR = \frac{\text{clicks}}{\text{impressions}} \times 100$)
-   - conversion rate ($CVR = \frac{\text{conversions}}{\text{clicks}} \times 100$)
-   - return on investment ($ROI = \frac{\text{revenue} - \text{spend}}{\text{spend}} \times 100$)
+<details>
+<summary><b>🏛️ Enterprise Decision Engine (`/api/v1`)</b></summary>
 
-### Success Score Calculation
-The overall **Success Score (0-99%)** is a normalized comparison between the simulated prediction and the user's historical performance. 
-- Z-scores are computed for predicted CTR, CVR, and ROI based on the mean ($\mu$) and standard deviation ($\sigma$) of the user's historical data:
-  $$Z = \frac{X_{\text{pred}} - \mu_{\text{hist}}}{\sigma_{\text{hist}}}$$
-- Individual scores are scaled so that historical average yields approximately $60\%$ success, with bounds at $10\%$ and $99\%$:
-  $$\text{Score} = \min(\max(60 + Z \times 15, 10.0), 99.0)$$
-- The final score is a weighted average favoring financial performance:
-  $$\text{Success Score} = 0.25 \times \text{Score}_{\text{CTR}} + 0.35 \times \text{Score}_{\text{CVR}} + 0.40 \times \text{Score}_{\text{ROI}}$$
+* `POST /api/v1/attribution` - Computes channel revenue credit using 5 attribution models.
+* `POST /api/v1/experimentation` - Evaluates A/B test variant statistical lift and p-values.
+* `POST /api/v1/optimization` - Solves optimal budget allocation via SLSQP.
+* `GET /api/v1/search/semantic` - Performs tenant-isolated Qdrant vector semantic campaign search.
+* `GET /api/v1/jobs/{job_id}` - Checks status and progress of async background tasks.
 </details>
 
 ---
 
-## 🛠️ Local Setup & Development
-
-Follow these steps to run the MarketPulse system locally on your machine.
+## 🛠️ Local Setup (Without Docker)
 
 ### Prerequisites
-- **Python 3.9+** installed on your system.
-- **Node.js v18+** and **npm** installed.
-
----
+- **Python 3.11+** installed.
+- **Node.js v20+** and **npm** installed.
 
 ### 1. Backend Setup
 
-1. **Navigate to the backend folder**:
+1. **Navigate to the backend directory**:
    ```bash
    cd backend
    ```
 
-2. **Create and activate a virtual environment**:
+2. **Create and activate a Python virtual environment**:
    * **Windows (PowerShell)**:
      ```powershell
      python -m venv venv
@@ -199,17 +166,17 @@ Follow these steps to run the MarketPulse system locally on your machine.
    pip install -r requirements.txt
    ```
 
-4. **Start the FastAPI server**:
+4. **Start the FastAPI backend server**:
    ```bash
    python main.py
    ```
-   The backend server will start running on **`http://127.0.0.1:8000`** with auto-reload enabled.
+   The backend server will run at **`http://127.0.0.1:8000`**.
 
 ---
 
 ### 2. Frontend Setup
 
-1. **Navigate to the frontend folder**:
+1. **Navigate to the frontend directory**:
    ```bash
    cd frontend
    ```
@@ -223,30 +190,51 @@ Follow these steps to run the MarketPulse system locally on your machine.
    ```bash
    npm run dev
    ```
-   The frontend application will be hosted on **`http://localhost:5173`**.
-
-> [!NOTE]
-> All API requests made from the frontend to `/api/*` are automatically proxied to `http://127.0.0.1:8000` via Vite's proxy configurations in `vite.config.js`.
+   The frontend application will be hosted at **`http://localhost:5173`**.
 
 ---
 
-## 🧪 Pipeline Verification & Testing
+## 🧪 Automated Verification & Test Suite
 
-To verify database seeding, analytics aggregations, ML model training, and simulator pipelines are functional, execute the backend test script:
+To verify database schema creation, multi-tenant workspace provisioning, bcrypt authentication, analytics aggregations, Random Forest ML training, and decision engine calculations, run the verification test suite:
 
 ```bash
-# In the backend directory with active virtual environment:
+# Inside backend directory with active virtual environment:
 python test_backend.py
 ```
 
-This will run a full verification suite that:
-1. Resets and initializes the SQLite database.
-2. Registers a test user.
-3. Seeds campaign data (~900 items).
-4. Computes dashboard KPIs.
-5. Trains Random Forest regressor models.
-6. Simulates a campaign prediction run.
-7. Compiles optimization advice from the recommendation engine.
+Expected output:
+```text
+=========================================
+STAGING MARKETPULSE AI BACKEND VERIFICATION
+=========================================
+1. Initializing DB and creating tables...
+[SUCCESS] DB Schema created with Multi-Tenant & Governance tables.
+
+2. Testing Multi-Tenant Provisioning & Password Hashing...
+[SUCCESS] Created Org ID=1, Workspace ID=1, User ID=1, Role=OWNER
+[SUCCESS] Password authentication verified with bcrypt.
+
+3. Seeding Campaign Data (~900 items)...
+[SUCCESS] Seeded 900 campaigns in DB.
+
+4. Calculating KPIs & Chart aggregations...
+[SUCCESS] KPIs calculated successfully.
+[SUCCESS] Charts datasets created successfully.
+
+5. Training Random Forest Regressor Model...
+[SUCCESS] Model successfully trained and saved.
+
+6. Running Campaign Success Simulation...
+[SUCCESS] Simulation predict query succeeded.
+
+7. Generating account optimization advice...
+[SUCCESS] Recommendations compiled.
+
+=========================================
+ALL ENTERPRISE BACKEND PIPELINES VERIFIED SUCCESSFULLY!
+=========================================
+```
 
 ---
 

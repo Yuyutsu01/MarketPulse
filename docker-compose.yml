@@ -1,0 +1,95 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: marketpulse_postgres
+    restart: always
+    environment:
+      POSTGRES_USER: marketpulse
+      POSTGRES_PASSWORD: marketpulse_password
+      POSTGRES_DB: marketpulse_db
+    ports:
+      - "5434:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U marketpulse -d marketpulse_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: marketpulse_redis
+    restart: always
+    ports:
+      - "6380:6379"
+    volumes:
+      - redis_data:/data
+
+  qdrant:
+    image: qdrant/qdrant:latest
+    container_name: marketpulse_qdrant
+    restart: always
+    ports:
+      - "6335:6333"
+      - "6336:6334"
+    volumes:
+      - qdrant_data:/qdrant/storage
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: marketpulse_backend
+    restart: always
+    environment:
+      - ENVIRONMENT=production
+      - DATABASE_URL=postgresql://marketpulse:marketpulse_password@postgres:5432/marketpulse_db
+      - REDIS_URL=redis://redis:6379/0
+      - QDRANT_HOST=qdrant
+      - QDRANT_PORT=6333
+      - JWT_SECRET_KEY=marketpulse_enterprise_super_secret_key_change_in_production_9876543210
+    ports:
+      - "8001:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+      qdrant:
+        condition: service_started
+
+  celery_worker:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: marketpulse_worker
+    restart: always
+    command: celery -A app.workers.celery_worker.celery_app worker --loglevel=info
+    environment:
+      - ENVIRONMENT=production
+      - DATABASE_URL=postgresql://marketpulse:marketpulse_password@postgres:5432/marketpulse_db
+      - REDIS_URL=redis://redis:6379/0
+      - QDRANT_HOST=qdrant
+      - QDRANT_PORT=6333
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: marketpulse_frontend
+    restart: always
+    ports:
+      - "8080:80"
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:
+  redis_data:
+  qdrant_data:
