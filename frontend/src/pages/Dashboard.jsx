@@ -26,6 +26,7 @@ import {
 } from "recharts";
 import api from "../services/api";
 import KpiCard from "../components/KpiCard";
+import logoImg from "../assets/MarketPulse.png";
 
 export default function Dashboard() {
   const [kpis, setKpis] = useState(null);
@@ -63,6 +64,12 @@ export default function Dashboard() {
 
   const PIE_COLORS = ["#6366f1", "#8b5cf6", "#06b6d4", "#10b981", "#f43f5e"];
 
+  const customTooltipProps = {
+    contentStyle: { backgroundColor: "#0f172a", borderColor: "#334155", borderRadius: "12px", color: "#ffffff" },
+    itemStyle: { color: "#ffffff" },
+    labelStyle: { color: "#ffffff" }
+  };
+
   if (loading) {
     return (
       <div className="space-y-6 animate-pulse p-1" id="dashboard-loading-view">
@@ -85,16 +92,27 @@ export default function Dashboard() {
 
   return (
     <div className="space-y-6" id="dashboard-view">
-      {/* Header */}
+      {/* Header with Logo */}
       <div className="flex justify-between items-center">
-        <div>
-          <h1 className="text-3xl font-extrabold font-outfit text-white tracking-tight">
-            Dashboard Analytics
-          </h1>
-          <p className="text-slate-400 text-sm mt-1">
-            Real-time campaign overview and execution trends.
-          </p>
+        <div className="flex items-center gap-4">
+          <div className="p-2 rounded-2xl glass-panel border border-slate-800 shadow-xl hidden sm:block">
+            <img src={logoImg} alt="MarketPulse AI Logo" className="w-12 h-12 object-contain rounded-xl" />
+          </div>
+          <div>
+            <div className="flex items-center gap-2">
+              <h1 className="text-3xl font-extrabold font-outfit text-white tracking-tight">
+                Dashboard Analytics
+              </h1>
+              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-brand-indigo/20 text-brand-indigo border border-brand-indigo/30 uppercase tracking-widest">
+                Enterprise AI
+              </span>
+            </div>
+            <p className="text-slate-400 text-sm mt-1">
+              Real-time campaign overview, attribution performance, and execution trends.
+            </p>
+          </div>
         </div>
+
         <button
           id="btn-refresh-dashboard"
           onClick={handleRefresh}
@@ -115,161 +133,150 @@ export default function Dashboard() {
         </div>
       )}
 
-      {/* KPI Cards Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" id="kpi-grid">
-        <KpiCard
+      {/* Primary KPI Cards Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" id="kpi-cards-grid">
+        <KpiCard 
           id="kpi-card-roi"
-          title="Return on Investment"
-          value={`${kpis?.roi}%`}
+          title="Return on Investment" 
+          value={`${kpis?.roi}%`} 
+          subtitle="Overall ROI yield" 
           icon={TrendingUp}
-          subtext={`Rev: $${kpis?.total_revenue.toLocaleString()}`}
-          change={12.4}
-          isPositive={kpis?.roi >= 0}
-          tooltip="Total Revenue minus Spend, divided by Spend. Higher values represent better return efficiency."
+          variant="emerald"
         />
-        <KpiCard
+        <KpiCard 
           id="kpi-card-ctr"
-          title="Click-Through Rate"
-          value={`${kpis?.ctr}%`}
+          title="Click-Through Rate" 
+          value={`${kpis?.ctr}%`} 
+          subtitle="Engagement efficiency" 
           icon={MousePointerClick}
-          subtext={`Clicks: ${kpis?.total_clicks.toLocaleString()}`}
-          change={4.2}
-          isPositive={true}
-          tooltip="The percentage of campaign impressions that resulted in clicks."
+          variant="indigo"
         />
-        <KpiCard
+        <KpiCard 
           id="kpi-card-cpc"
-          title="Cost Per Click"
-          value={`$${kpis?.cpc}`}
+          title="Cost Per Click" 
+          value={`$${kpis?.cpc}`} 
+          subtitle="Average CPC spend" 
           icon={DollarSign}
-          subtext={`Spend: $${kpis?.total_spend.toLocaleString()}`}
-          change={-3.1}
-          isPositive={true}
-          tooltip="Average cost paid for each individual ad click. Lower values indicate cheaper traffic."
+          variant="cyan"
         />
-        <KpiCard
-          id="kpi-card-cvr"
-          title="Conversion Rate"
-          value={`${kpis?.conversion_rate}%`}
-          icon={Activity}
-          subtext={`Convs: ${kpis?.total_conversions.toLocaleString()}`}
-          change={2.8}
-          isPositive={true}
-          tooltip="The percentage of ad clicks that successfully completed a conversion action."
+        <KpiCard 
+          id="kpi-card-conversions"
+          title="Total Conversions" 
+          value={kpis?.total_conversions?.toLocaleString()} 
+          subtitle="Acquisition volume" 
+          icon={ShoppingBag}
+          variant="amber"
         />
       </div>
 
-      {/* Main Charts Grid */}
+      {/* Secondary Metric Cards */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4" id="secondary-kpi-grid">
+        <div className="glass-panel p-4 rounded-2xl border border-slate-800/60">
+          <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">Total Spend</span>
+          <p className="text-lg font-bold font-outfit text-white mt-1">${kpis?.total_spend?.toLocaleString()}</p>
+        </div>
+        <div className="glass-panel p-4 rounded-2xl border border-slate-800/60">
+          <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">Total Impressions</span>
+          <p className="text-lg font-bold font-outfit text-white mt-1">{kpis?.total_impressions?.toLocaleString()}</p>
+        </div>
+        <div className="glass-panel p-4 rounded-2xl border border-slate-800/60">
+          <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">Conversion Rate</span>
+          <p className="text-lg font-bold font-outfit text-white mt-1">{kpis?.conversion_rate}%</p>
+        </div>
+        <div className="glass-panel p-4 rounded-2xl border border-slate-800/60">
+          <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">CAC</span>
+          <p className="text-lg font-bold font-outfit text-white mt-1">${kpis?.cac}</p>
+        </div>
+      </div>
+
+      {/* Main Charts Section */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         
-        {/* Timeseries Area Chart (Performance Over Time) */}
-        <div className="lg:col-span-2 glass-panel p-6 rounded-3xl flex flex-col justify-between" id="chart-timeseries-panel">
-          <div className="mb-6">
-            <h3 className="text-lg font-bold font-outfit text-white">Campaign Performance Trends</h3>
-            <p className="text-xs text-slate-400 mt-0.5">Spend and revenue trajectory over the past 30 days</p>
-          </div>
+        {/* Timeseries Area Chart */}
+        <div className="lg:col-span-2 glass-panel p-6 rounded-3xl" id="timeseries-chart-panel">
+          <h3 className="text-lg font-bold font-outfit text-white mb-4 flex items-center gap-2">
+            <Activity size={20} className="text-brand-indigo" />
+            Performance Trends Over Time
+          </h3>
           <div className="h-80 w-full">
             <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={charts?.timeseries} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+              <AreaChart data={charts?.timeseries || []} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                 <defs>
-                  <linearGradient id="colorSpend" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#8b5cf6" stopOpacity={0.25}/>
-                    <stop offset="95%" stopColor="#8b5cf6" stopOpacity={0}/>
+                  <linearGradient id="spendGradient" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#6366f1" stopOpacity={0.4}/>
+                    <stop offset="95%" stopColor="#6366f1" stopOpacity={0.0}/>
                   </linearGradient>
-                  <linearGradient id="colorRevenue" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#10b981" stopOpacity={0.25}/>
-                    <stop offset="95%" stopColor="#10b981" stopOpacity={0}/>
+                  <linearGradient id="conversionsGradient" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#10b981" stopOpacity={0.4}/>
+                    <stop offset="95%" stopColor="#10b981" stopOpacity={0.0}/>
                   </linearGradient>
                 </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
-                <XAxis dataKey="date" stroke="#64748b" fontSize={11} tickLine={false} />
-                <YAxis stroke="#64748b" fontSize={11} tickLine={false} />
-                <Tooltip />
-                <Legend verticalAlign="top" height={36} />
-                <Area type="monotone" name="Spend ($)" dataKey="spend" stroke="#8b5cf6" strokeWidth={2} fillOpacity={1} fill="url(#colorSpend)" />
-                <Area type="monotone" name="Revenue ($)" dataKey="revenue" stroke="#10b981" strokeWidth={2} fillOpacity={1} fill="url(#colorRevenue)" />
+                <CartesianGrid strokeDasharray="3 3" stroke="#334155" opacity={0.4} />
+                <XAxis dataKey="date" stroke="#94a3b8" fontSize={11} tickLine={false} />
+                <YAxis stroke="#94a3b8" fontSize={11} tickLine={false} />
+                <Tooltip {...customTooltipProps} />
+                <Legend wrapperStyle={{ fontSize: "12px", paddingTop: "10px" }} />
+                <Area type="monotone" dataKey="spend" name="Daily Spend ($)" stroke="#6366f1" strokeWidth={2.5} fillOpacity={1} fill="url(#spendGradient)" />
+                <Area type="monotone" dataKey="conversions" name="Conversions" stroke="#10b981" strokeWidth={2.5} fillOpacity={1} fill="url(#conversionsGradient)" />
               </AreaChart>
             </ResponsiveContainer>
           </div>
         </div>
 
-        {/* Spend Share Donut Chart */}
-        <div className="glass-panel p-6 rounded-3xl flex flex-col justify-between" id="chart-spend-share-panel">
-          <div className="mb-4">
-            <h3 className="text-lg font-bold font-outfit text-white">Spend Share by Platform</h3>
-            <p className="text-xs text-slate-400 mt-0.5">Budget distribution across marketing channels</p>
-          </div>
-          <div className="h-64 w-full relative flex items-center justify-center">
+        {/* Platform Share Donut Chart */}
+        <div className="glass-panel p-6 rounded-3xl" id="platform-share-chart-panel">
+          <h3 className="text-lg font-bold font-outfit text-white mb-4 flex items-center gap-2">
+            <Eye size={20} className="text-brand-cyan" />
+            Platform Spend Share
+          </h3>
+          <div className="h-80 w-full flex items-center justify-center">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie
-                  data={charts?.platform_shares}
+                  data={charts?.platform_shares || []}
                   cx="50%"
                   cy="50%"
                   innerRadius={65}
-                  outerRadius={85}
-                  paddingAngle={4}
+                  outerRadius={95}
+                  paddingAngle={5}
                   dataKey="spend"
                   nameKey="platform"
                 >
-                  {charts?.platform_shares.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={PIE_COLORS[index % PIE_COLORS.length]} />
+                  {(charts?.platform_shares || []).map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={PIE_COLORS[index % PIE_COLORS.length]} stroke="#0f172a" strokeWidth={2} />
                   ))}
                 </Pie>
-                <Tooltip formatter={(value) => `$${value.toLocaleString()}`} />
+                <Tooltip {...customTooltipProps} formatter={(val) => `$${val.toLocaleString()}`} />
+                <Legend wrapperStyle={{ fontSize: "11px" }} layout="horizontal" align="center" verticalAlign="bottom" />
               </PieChart>
             </ResponsiveContainer>
-            
-            {/* Center Label */}
-            <div className="absolute flex flex-col items-center justify-center text-center">
-              <span className="text-[10px] uppercase font-bold text-slate-400 tracking-widest">Total Spend</span>
-              <span className="text-2xl font-extrabold font-outfit text-white mt-1">
-                ${kpis?.total_spend >= 1000 ? `${(kpis?.total_spend / 1000).toFixed(1)}k` : kpis?.total_spend}
-              </span>
-            </div>
-          </div>
-          <div className="grid grid-cols-2 gap-3 mt-4">
-            {charts?.platform_shares.map((entry, index) => (
-              <div key={entry.platform} className="flex items-center gap-2">
-                <span 
-                  className="w-2.5 h-2.5 rounded-full inline-block shrink-0" 
-                  style={{ backgroundColor: PIE_COLORS[index % PIE_COLORS.length] }} 
-                />
-                <span className="text-xs text-slate-300 truncate">{entry.platform}</span>
-                <span className="text-[10px] text-slate-500 font-semibold">
-                  ({((entry.spend / kpis?.total_spend) * 100).toFixed(0)}%)
-                </span>
-              </div>
-            ))}
           </div>
         </div>
 
       </div>
 
-      {/* Grouped Comparison Chart */}
-      <div className="glass-panel p-6 rounded-3xl" id="chart-comparison-panel">
-        <div className="mb-6">
-          <h3 className="text-lg font-bold font-outfit text-white">Platform Efficiency Comparison</h3>
-          <p className="text-xs text-slate-400 mt-0.5">Side-by-side ROI and Conversion Rate mapping per channel</p>
-        </div>
-        <div className="h-80 w-full">
+      {/* Cross-Platform Comparison Bar Chart */}
+      <div className="glass-panel p-6 rounded-3xl" id="platform-comparison-chart-panel">
+        <h3 className="text-lg font-bold font-outfit text-white mb-4 flex items-center gap-2">
+          <Percent size={20} className="text-brand-amber" />
+          Cross-Platform ROI Efficiency Comparison (%)
+        </h3>
+        <div className="h-72 w-full">
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={charts?.platform_comparisons} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
-              <XAxis dataKey="platform" stroke="#64748b" fontSize={11} tickLine={false} />
-              <YAxis stroke="#64748b" fontSize={11} tickLine={false} />
-              <Tooltip />
-              <Legend verticalAlign="top" height={36} />
-              <Bar name="ROI (%)" dataKey="roi" fill="#6366f1" radius={[4, 4, 0, 0]}>
-                {charts?.platform_comparisons.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={entry.roi >= 0 ? "#6366f1" : "#f43f5e"} />
-                ))}
-              </Bar>
-              <Bar name="Conversion Rate (%)" dataKey="conversion_rate" fill="#06b6d4" radius={[4, 4, 0, 0]} />
+            <BarChart data={charts?.platform_comparisons || []} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#334155" opacity={0.4} />
+              <XAxis dataKey="platform" stroke="#94a3b8" fontSize={11} tickLine={false} />
+              <YAxis stroke="#94a3b8" fontSize={11} tickLine={false} />
+              <Tooltip {...customTooltipProps} />
+              <Legend wrapperStyle={{ fontSize: "12px", paddingTop: "10px" }} />
+              <Bar dataKey="roi" name="ROI (%)" fill="#6366f1" radius={[8, 8, 0, 0]} />
+              <Bar dataKey="conversion_rate" name="Conversion Rate (%)" fill="#06b6d4" radius={[8, 8, 0, 0]} />
+              <Bar dataKey="ctr" name="CTR (%)" fill="#10b981" radius={[8, 8, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>
       </div>
+
     </div>
   );
 }

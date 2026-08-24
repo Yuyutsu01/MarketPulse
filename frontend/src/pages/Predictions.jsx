@@ -10,7 +10,9 @@ import {
   CheckCircle,
   AlertTriangle,
   Lightbulb,
-  DollarSign
+  DollarSign,
+  Clock,
+  Users
 } from "lucide-react";
 import api from "../services/api";
 
@@ -75,7 +77,7 @@ export default function Predictions() {
       setHistory(histRes.data);
     } catch (err) {
       console.error(err);
-      setError("Prediction failed. Make sure you have campaign records loaded.");
+      setError(err?.response?.data?.detail || "Prediction failed. Make sure your account has campaign data.");
     } finally {
       setSimulating(false);
     }
@@ -337,7 +339,7 @@ export default function Predictions() {
                     <div className="bg-slate-800/30 border border-slate-800 p-4 rounded-2xl text-center">
                       <div className="flex justify-center text-brand-indigo mb-2"><MousePointerClick size={16} /></div>
                       <span className="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Exp CTR</span>
-                      <p className="text-lg font-bold font-outfit text-white mt-1">{result.expected_conversion_rate}%</p>
+                      <p className="text-lg font-bold font-outfit text-white mt-1">{result.expected_ctr ?? result.expected_conversion_rate}%</p>
                     </div>
                     <div className="bg-slate-800/30 border border-slate-800 p-4 rounded-2xl text-center">
                       <div className="flex justify-center text-brand-cyan mb-2"><Activity size={16} /></div>
@@ -417,7 +419,7 @@ export default function Predictions() {
                     Budget Allocations
                   </h4>
                   <div className="text-xs text-slate-400 leading-relaxed space-y-2">
-                    {generalRecs?.budget_allocation.map((rec, i) => (
+                    {generalRecs?.budget_allocation?.map((rec, i) => (
                       <p key={i} dangerouslySetInnerHTML={{ __html: rec }} />
                     ))}
                   </div>
@@ -430,7 +432,7 @@ export default function Predictions() {
                     Time Scheduling
                   </h4>
                   <div className="text-xs text-slate-400 leading-relaxed space-y-2">
-                    {generalRecs?.timing_optimization.map((rec, i) => (
+                    {generalRecs?.timing_optimization?.map((rec, i) => (
                       <p key={i} dangerouslySetInnerHTML={{ __html: rec }} />
                     ))}
                   </div>
@@ -443,7 +445,7 @@ export default function Predictions() {
                     Demographics & Devices
                   </h4>
                   <div className="text-xs text-slate-400 leading-relaxed space-y-2">
-                    {generalRecs?.demographic_insights.map((rec, i) => (
+                    {generalRecs?.demographic_insights?.map((rec, i) => (
                       <p key={i} dangerouslySetInnerHTML={{ __html: rec }} />
                     ))}
                   </div>
@@ -456,7 +458,7 @@ export default function Predictions() {
                     Creative & Funnels
                   </h4>
                   <div className="text-xs text-slate-400 leading-relaxed space-y-2">
-                    {generalRecs?.ad_performance.map((rec, i) => (
+                    {generalRecs?.ad_performance?.map((rec, i) => (
                       <p key={i} dangerouslySetInnerHTML={{ __html: rec }} />
                     ))}
                   </div>

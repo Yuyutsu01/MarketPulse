@@ -7,9 +7,9 @@ import {
   BrainCircuit, 
   LogOut, 
   Menu, 
-  X,
-  LineChart
+  X
 } from "lucide-react";
+import logoImg from "../assets/MarketPulse.png";
 
 export default function Sidebar({ user, onLogout }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -59,14 +59,14 @@ export default function Sidebar({ user, onLogout }) {
         <div className="p-6 flex flex-col h-full">
           {/* Logo Brand */}
           <div className="flex items-center gap-3 mb-8 mt-4 lg:mt-0">
-            <div className="p-2.5 rounded-xl bg-gradient-to-br from-brand-indigo to-brand-violet shadow-lg shadow-indigo-500/35">
-              <LineChart size={24} className="text-white" />
+            <div className="p-1 rounded-xl bg-slate-900/80 border border-slate-800 shadow-md">
+              <img src={logoImg} alt="MarketPulse Logo" className="w-10 h-10 object-contain rounded-lg" />
             </div>
             <div>
               <span className="font-outfit font-extrabold text-xl tracking-tight bg-gradient-to-r from-white via-slate-100 to-indigo-200 bg-clip-text text-transparent">
                 MarketPulse
               </span>
-              <span className="ml-1 text-[10px] font-semibold text-brand-cyan tracking-widest uppercase">
+              <span className="ml-1.5 text-[10px] font-semibold text-brand-cyan tracking-widest uppercase">
                 AI
               </span>
             </div>

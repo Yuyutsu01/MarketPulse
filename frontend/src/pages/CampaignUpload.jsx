@@ -349,7 +349,7 @@ export default function CampaignUpload() {
 
             <a
               id="link-download-template"
-              href="http://127.0.0.1:8000/api/campaigns/template"
+              href="/api/campaigns/template"
               download
               className="w-full glass-btn-secondary py-2.5 rounded-xl text-xs flex items-center justify-center gap-2 hover:text-white"
             >

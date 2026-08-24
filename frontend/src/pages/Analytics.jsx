@@ -39,6 +39,12 @@ export default function Analytics() {
 
   const PIE_COLORS = ["#6366f1", "#06b6d4", "#8b5cf6"];
 
+  const customTooltipProps = {
+    contentStyle: { backgroundColor: "#0f172a", borderColor: "#334155", borderRadius: "12px", color: "#ffffff" },
+    itemStyle: { color: "#ffffff" },
+    labelStyle: { color: "#ffffff" }
+  };
+
   if (loading) {
     return (
       <div className="space-y-6 animate-pulse p-1" id="analytics-loading-view">
@@ -52,6 +58,11 @@ export default function Analytics() {
       </div>
     );
   }
+
+  const devices = audienceData?.devices || [];
+  const ageGroups = audienceData?.age_groups || [];
+  const geography = audienceData?.geography || [];
+  const hourlyPerformance = audienceData?.hourly_performance || [];
 
   return (
     <div className="space-y-6" id="analytics-view">
@@ -108,7 +119,7 @@ export default function Analytics() {
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie
-                  data={audienceData?.devices}
+                  data={devices}
                   cx="50%"
                   cy="50%"
                   innerRadius={60}
@@ -117,23 +128,23 @@ export default function Analytics() {
                   dataKey="conversions"
                   nameKey="device"
                 >
-                  {audienceData?.devices.map((entry, index) => (
+                  {devices.map((entry, index) => (
                     <Cell key={`cell-${index}`} fill={PIE_COLORS[index % PIE_COLORS.length]} />
                   ))}
                 </Pie>
-                <Tooltip formatter={(value) => `${value} convs`} />
+                <Tooltip {...customTooltipProps} formatter={(value) => `${value} convs`} />
               </PieChart>
             </ResponsiveContainer>
             
             <div className="absolute text-center flex flex-col items-center">
               <span className="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Top device</span>
               <span className="text-xl font-extrabold text-white mt-0.5">
-                {audienceData?.devices[0]?.device || "Mobile"}
+                {devices[0]?.device || "Mobile"}
               </span>
             </div>
           </div>
           <div className="flex justify-around items-center border-t border-slate-800/60 pt-4 mt-2">
-            {audienceData?.devices.map((d, index) => (
+            {devices.map((d, index) => (
               <div key={d.device} className="text-center">
                 <div className="flex items-center justify-center gap-1.5">
                   <span className="w-2 h-2 rounded-full inline-block" style={{ backgroundColor: PIE_COLORS[index % PIE_COLORS.length] }} />
@@ -157,11 +168,11 @@ export default function Analytics() {
           </div>
           <div className="h-72 w-full">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={audienceData?.age_groups} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+              <BarChart data={ageGroups} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
                 <XAxis dataKey="age_group" stroke="#64748b" fontSize={11} tickLine={false} />
                 <YAxis stroke="#64748b" fontSize={11} tickLine={false} />
-                <Tooltip />
+                <Tooltip {...customTooltipProps} />
                 <Legend verticalAlign="top" height={36} />
                 <Bar name="Conversions" dataKey="conversions" fill="#06b6d4" radius={[4, 4, 0, 0]} />
                 <Bar name="Conversion Rate (%)" dataKey="conversion_rate" fill="#6366f1" radius={[4, 4, 0, 0]} />
@@ -181,11 +192,11 @@ export default function Analytics() {
           </div>
           <div className="h-72 w-full">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={audienceData?.geography} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+              <BarChart data={geography} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
                 <XAxis dataKey="geography" stroke="#64748b" fontSize={11} tickLine={false} />
                 <YAxis stroke="#64748b" fontSize={11} tickLine={false} />
-                <Tooltip />
+                <Tooltip {...customTooltipProps} />
                 <Legend verticalAlign="top" height={36} />
                 <Bar name="CAC ($)" dataKey="cac" fill="#f43f5e" radius={[4, 4, 0, 0]} />
                 <Bar name="Conversions" dataKey="conversions" fill="#10b981" radius={[4, 4, 0, 0]} />
@@ -205,11 +216,11 @@ export default function Analytics() {
           </div>
           <div className="h-72 w-full">
             <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={audienceData?.hourly_performance} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+              <LineChart data={hourlyPerformance} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
                 <XAxis dataKey="hour" stroke="#64748b" fontSize={11} tickLine={false} />
                 <YAxis stroke="#64748b" fontSize={11} tickLine={false} />
-                <Tooltip />
+                <Tooltip {...customTooltipProps} />
                 <Line type="monotone" name="Conversion Rate (%)" dataKey="conversion_rate" stroke="#8b5cf6" strokeWidth={2.5} dot={false} />
                 <Line type="monotone" name="Conversions" dataKey="conversions" stroke="#6366f1" strokeWidth={1.5} dot={false} strokeDasharray="5 5" />
               </LineChart>
