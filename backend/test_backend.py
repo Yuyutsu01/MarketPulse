@@ -22,33 +22,50 @@ def run_tests():
     print("\n1. Initializing DB and creating tables...")
     Base.metadata.drop_all(bind=engine)
     Base.metadata.create_all(bind=engine)
-    print("[SUCCESS] DB Schema created.")
+    print("[SUCCESS] DB Schema created with Multi-Tenant & Governance tables.")
 
     db = SessionLocal()
     try:
-        # 2. Test User Creation
-        print("\n2. Testing User Creation...")
-        test_email = "test@company.com"
-        test_password = "password123"
+        # 2. Test Multi-Tenant Organization, Workspace & User Creation
+        print("\n2. Testing Multi-Tenant Provisioning & Password Hashing...")
+        org = models.Organization(name="Test Acme Corp", slug="test-acme-corp")
+        db.add(org)
+        db.commit()
+        db.refresh(org)
+
+        workspace = models.Workspace(organization_id=org.id, name="Q3 Growth", slug="q3-growth")
+        db.add(workspace)
+        db.commit()
+        db.refresh(workspace)
+
+        test_email = "analyst@acmecorp.com"
+        test_password = "securePassword123!"
         hashed = auth.get_password_hash(test_password)
         
         user = models.User(
-            name="Test Analyst",
+            organization_id=org.id,
+            name="Senior Analyst",
             email=test_email,
-            hashed_password=hashed
+            hashed_password=hashed,
+            role="OWNER"
         )
         db.add(user)
         db.commit()
         db.refresh(user)
-        print(f"[SUCCESS] Created User: ID={user.id}, Name={user.name}")
+
+        ws_user = models.WorkspaceUser(workspace_id=workspace.id, user_id=user.id, role="OWNER")
+        db.add(ws_user)
+        db.commit()
+
+        print(f"[SUCCESS] Created Org ID={org.id}, Workspace ID={workspace.id}, User ID={user.id}, Role={user.role}")
         
         # Verify Auth Hashing Check
         assert auth.verify_password(test_password, user.hashed_password) is True
-        print("[SUCCESS] Password authentication verified.")
+        print("[SUCCESS] Password authentication verified with bcrypt.")
 
-        # 3. Test Campaign Seeding
+        # 3. Test Campaign Seeding scoped to Workspace
         print("\n3. Seeding Campaign Data (~900 items)...")
-        seed_user_campaigns(db, user.id)
+        seed_user_campaigns(db, user.id, organization_id=org.id, workspace_id=workspace.id)
         
         campaigns_count = db.query(models.Campaign).filter(models.Campaign.user_id == user.id).count()
         print(f"[SUCCESS] Seeded {campaigns_count} campaigns in DB.")
@@ -116,7 +133,7 @@ def run_tests():
         print("[SUCCESS] Recommendations compiled.")
         
         print("\n=========================================")
-        print("ALL BACKEND PIPELINES VERIFIED SUCCESSFULLY!")
+        print("ALL ENTERPRISE BACKEND PIPELINES VERIFIED SUCCESSFULLY!")
         print("=========================================")
         
     finally:

@@ -1,13 +1,26 @@
 import random
 from datetime import datetime, date, timedelta
 from sqlalchemy.orm import Session
-from app.models.models import Campaign
+from app.models.models import Campaign, User, Organization, Workspace
 
-def seed_user_campaigns(db: Session, user_id: int):
+def seed_user_campaigns(db: Session, user_id: int, organization_id: int = None, workspace_id: int = None):
+    """
+    Seeds realistic synthetic marketing campaign data (~900 items over 30 days) scoped to Organization & Workspace.
+    """
     # Check if user already has campaigns
     existing_count = db.query(Campaign).filter(Campaign.user_id == user_id).count()
     if existing_count > 0:
         return
+
+    # Fetch user if organization_id or workspace_id not passed
+    user = db.query(User).filter(User.id == user_id).first()
+    if user:
+        if not organization_id:
+            organization_id = user.organization_id
+        if not workspace_id and organization_id:
+            workspace = db.query(Workspace).filter(Workspace.organization_id == organization_id).first()
+            if workspace:
+                workspace_id = workspace.id
 
     platforms = ["Facebook", "Google Ads", "Instagram", "TikTok", "YouTube"]
     devices = ["Mobile", "Desktop", "Tablet"]
@@ -29,7 +42,7 @@ def seed_user_campaigns(db: Session, user_id: int):
     for day_offset in range(30):
         current_date = today - timedelta(days=day_offset)
         
-        # Create about 30 campaign records per day
+        # Create 30 campaign records per day
         for _ in range(30):
             platform = random.choice(platforms)
             device = random.choice(devices)
@@ -39,12 +52,11 @@ def seed_user_campaigns(db: Session, user_id: int):
             
             campaign_name = random.choice(campaign_names[platform])
             
-            # Base performance parameters based on platform and demographics to create realistic variations
-            base_ctr = 0.02  # 2% standard
-            base_cpc = 1.0   # $1.00 standard
-            base_conv_rate = 0.02  # 2% standard
+            # Base performance parameters based on channel to create realistic variations
+            base_ctr = 0.02
+            base_cpc = 1.0
+            base_conv_rate = 0.02
             
-            # Platform Adjustments
             if platform == "Google Ads":
                 base_ctr = 0.04
                 base_cpc = 2.0
@@ -59,7 +71,6 @@ def seed_user_campaigns(db: Session, user_id: int):
                 if device == "Mobile":
                     base_ctr *= 1.4
                     base_conv_rate *= 1.4
-                # Time performance constraint: Instagram campaigns perform best between 7 PM - 10 PM
                 if 19 <= hour <= 22:
                     base_conv_rate *= 1.8
                     base_ctr *= 1.3
@@ -78,7 +89,6 @@ def seed_user_campaigns(db: Session, user_id: int):
                 base_ctr = 0.022
                 base_cpc = 1.2
                 base_conv_rate = 0.025
-                # Underperforming segment constraint: reduce spend/conversions for Android/Mobile aged 45+
                 if age in ["45-54", "55+"] and device == "Mobile":
                     base_conv_rate *= 0.4
                     base_ctr *= 0.6
@@ -94,7 +104,6 @@ def seed_user_campaigns(db: Session, user_id: int):
             cpc = base_cpc * random.uniform(0.9, 1.1)
             conv_rate = base_conv_rate * random.uniform(0.8, 1.2)
             
-            # Geolocation multipliers
             if geo == "US":
                 cpc *= 1.2
                 conv_rate *= 1.1
@@ -103,8 +112,6 @@ def seed_user_campaigns(db: Session, user_id: int):
             elif geo == "CA":
                 cpc *= 0.95
 
-            # Calculate raw metrics
-            # High spend on weekends
             is_weekend = (current_date.weekday() >= 5)
             budget_multiplier = 1.5 if is_weekend else 1.0
             
@@ -115,16 +122,15 @@ def seed_user_campaigns(db: Session, user_id: int):
                 
             spend = round(clicks * cpc, 2)
             conversions = int(clicks * conv_rate)
-            
-            # Ensure conversions doesn't exceed clicks
             if conversions > clicks:
                 conversions = clicks
 
-            # Revenue calculation (avg order value between $40 and $80)
             avg_order_value = random.uniform(40.0, 80.0)
             revenue = round(conversions * avg_order_value, 2)
 
             record = Campaign(
+                organization_id=organization_id,
+                workspace_id=workspace_id,
                 user_id=user_id,
                 campaign_name=campaign_name,
                 platform=platform,

@@ -2,6 +2,36 @@ from pydantic import BaseModel, EmailStr, Field
 from datetime import datetime, date
 from typing import Optional, List, Dict, Any
 
+# Multi-Tenant & Organization Schemas
+class OrganizationBase(BaseModel):
+    name: str
+    slug: str
+
+class OrganizationCreate(OrganizationBase):
+    pass
+
+class OrganizationResponse(OrganizationBase):
+    id: int
+    created_at: datetime
+
+    class Config:
+        from_attributes = True
+
+class WorkspaceBase(BaseModel):
+    name: str
+    slug: str
+
+class WorkspaceCreate(WorkspaceBase):
+    organization_id: int
+
+class WorkspaceResponse(WorkspaceBase):
+    id: int
+    organization_id: int
+    created_at: datetime
+
+    class Config:
+        from_attributes = True
+
 # Authentication Schemas
 class UserBase(BaseModel):
     name: str
@@ -9,9 +39,13 @@ class UserBase(BaseModel):
 
 class UserCreate(UserBase):
     password: str
+    organization_name: Optional[str] = None
 
 class UserResponse(UserBase):
     id: int
+    organization_id: Optional[int] = None
+    role: str = "ANALYST"
+    is_active: bool = True
     created_at: datetime
 
     class Config:
@@ -23,7 +57,8 @@ class UserLogin(BaseModel):
 
 class Token(BaseModel):
     access_token: str
-    token_type: str
+    refresh_token: Optional[str] = None
+    token_type: str = "bearer"
 
 class TokenData(BaseModel):
     email: Optional[str] = None
@@ -49,6 +84,8 @@ class CampaignCreate(CampaignBase):
 class CampaignResponse(CampaignBase):
     id: int
     user_id: int
+    organization_id: Optional[int] = None
+    workspace_id: Optional[int] = None
     created_at: datetime
 
     class Config:
@@ -70,8 +107,11 @@ class PredictionCreate(PredictionBase):
 class PredictionResponse(PredictionBase):
     id: int
     user_id: int
+    organization_id: Optional[int] = None
+    workspace_id: Optional[int] = None
     predicted_roi: float
     success_score: float
+    expected_ctr: Optional[float] = None
     expected_conversion_rate: float
     recommendations: Optional[str] = None
     created_at: datetime
@@ -155,3 +195,42 @@ class AudienceInsightsResponse(BaseModel):
     age_groups: List[AgeMetric]
     geography: List[GeoMetric]
     hourly_performance: List[HourMetric]
+
+# Audit Log & Job Schemas
+class AuditLogResponse(BaseModel):
+    id: int
+    actor_id: Optional[int] = None
+    action: str
+    resource: str
+    ip_address: Optional[str] = None
+    timestamp: datetime
+
+    class Config:
+        from_attributes = True
+
+class JobStatusResponse(BaseModel):
+    id: str
+    task_type: str
+    status: str
+    progress_percent: int
+    error_message: Optional[str] = None
+    result_json: Optional[str] = None
+    created_at: datetime
+    updated_at: datetime
+
+    class Config:
+        from_attributes = True
+
+class DataQualityReportResponse(BaseModel):
+    id: int
+    workspace_id: int
+    dataset_name: str
+    total_rows: int
+    valid_rows: int
+    warning_rows: int
+    rejected_rows: int
+    issues_json: Optional[str] = None
+    created_at: datetime
+
+    class Config:
+        from_attributes = True

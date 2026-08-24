@@ -1,22 +1,31 @@
 import os
 from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import declarative_base, sessionmaker
+from app.core.config import settings
 
-# Database path (backend/marketpulse.db)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-DATABASE_URL = f"sqlite:///{os.path.join(BASE_DIR, 'marketpulse.db')}"
+# Parse Database URL
+DATABASE_URL = settings.DATABASE_URL
 
-# Connect args needed for SQLite to avoid thread conflicts
-engine = create_engine(
-    DATABASE_URL, connect_args={"check_same_thread": False}
-)
+# Configure engine arguments based on dialect
+engine_kwargs = {}
+if DATABASE_URL.startswith("sqlite"):
+    engine_kwargs["connect_args"] = {"check_same_thread": False}
+else:
+    # PostgreSQL connection pooling setup
+    engine_kwargs["pool_size"] = 10
+    engine_kwargs["max_overflow"] = 20
+    engine_kwargs["pool_pre_ping"] = True
+
+engine = create_engine(DATABASE_URL, **engine_kwargs)
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 Base = declarative_base()
 
 def get_db():
+    """
+    FastAPI dependency that provides a transactional database session context per request.
+    """
     db = SessionLocal()
     try:
         yield db
