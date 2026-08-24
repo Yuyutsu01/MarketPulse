@@ -18,16 +18,37 @@ An enterprise-grade Marketing Intelligence, Attribution, Experimentation, Predic
 
 ---
 
+## 📋 Table of Contents
+
+- [🎯 Platform Overview](#-platform-overview)
+- [📚 Documentation Directory](#-documentation-directory)
+- [🚀 Quick Start with Docker](#-quick-start-with-docker-recommended)
+- [🏛️ Enterprise System Architecture](#️-enterprise-system-architecture)
+- [✨ Enterprise Core Features](#-enterprise-core-features)
+- [🔍 REST API Reference](#-rest-api-reference)
+- [🛠️ Local Setup (Without Docker)](#️-local-setup-without-docker)
+- [🧪 Automated Verification & Test Suite](#-automated-verification--test-suite)
+- [📄 License](#-license)
+
+---
+
+## 🎯 Platform Overview
+
+**MarketPulse AI** transforms marketing operations from static analytics into a **continuous decision-intelligence platform**. Built for growth teams, performance marketers, and enterprise organizations, MarketPulse provides multi-tenant campaign management, temporal ML performance predictions, SLSQP budget allocation optimization, multi-touch channel attribution, statistical A/B experimentation, and tenant-isolated semantic campaign vector search.
+
 ---
 
 ## 📚 Documentation Directory
 
-Essential technical documentation is available in the [`docs/`](docs/) directory:
+Comprehensive documentation is available in the [`docs/`](docs/) directory:
 
-* 🏛️ **[System Architecture](docs/ARCHITECTURE.md)** — C4 diagram, multi-tenancy hierarchy, PostgreSQL ERD, and decision engine algorithms.
-* 📡 **[REST API Specification](docs/API_DOCUMENTATION.md)** — Full endpoint parameters, schemas, authentication, and JSON response payloads.
-* 🚀 **[Production Deployment Guide](docs/DEPLOYMENT_GUIDE.md)** — Docker Compose, environment variables, Nginx SSL, and backup guides.
-* 🛠️ **[Developer Guide](docs/DEVELOPER_GUIDE.md)** — Local setup, repository structure, test verification suite, and frontend workflow.
+| Document | Link | Description |
+| :--- | :--- | :--- |
+| 📊 **Project Status & Roadmap** | [`docs/PROJECT_STATUS.md`](docs/PROJECT_STATUS.md) | Details of completed features and upcoming roadmap items. |
+| 🏛️ **System Architecture** | [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) | C4 diagram, multi-tenancy hierarchy, PostgreSQL ERD, and decision engine algorithms. |
+| 📡 **REST API Specification** | [`docs/API_DOCUMENTATION.md`](docs/API_DOCUMENTATION.md) | Full endpoint parameters, schemas, authentication, and JSON response payloads. |
+| 🚀 **Production Deployment Guide** | [`docs/DEPLOYMENT_GUIDE.md`](docs/DEPLOYMENT_GUIDE.md) | Docker Compose, environment variables, Nginx SSL, and backup guides. |
+| 🛠️ **Developer Guide** | [`docs/DEVELOPER_GUIDE.md`](docs/DEVELOPER_GUIDE.md) | Local setup, repository structure, test verification suite, and frontend workflow. |
 
 ---
 
@@ -36,7 +57,7 @@ Essential technical documentation is available in the [`docs/`](docs/) directory
 Launch the complete 6-container enterprise stack (`PostgreSQL 16`, `Redis 7`, `Qdrant Vector DB`, `FastAPI Backend`, `Celery Worker`, `React Frontend`) with a single command:
 
 ```bash
-docker compose up -d --build
+docker compose up -d
 ```
 
 ### Access Platform Endpoints
@@ -66,7 +87,7 @@ graph TD
         F --> G[Auth & Multi-Tenant Router]
         F --> H[Analytics & Aggregations Router]
         F --> I[ML Prediction Sandbox Router]
-        F --> J[Enterprise Decision Router]
+        F --> J[Enterprise Router /api/v1]
 
         J -->|Attribution Calculations| K[Multi-Touch Attribution Engine]
         J -->|A/B Lift & Hypothesis Testing| L[Experimentation Engine]
@@ -156,30 +177,16 @@ graph TD
    cd backend
    ```
 
-2. **Create and activate a Python virtual environment**:
-   * **Windows (PowerShell)**:
-     ```powershell
-     python -m venv venv
-     .\venv\Scripts\Activate.ps1
-     ```
-   * **macOS/Linux**:
-     ```bash
-     python3 -m venv venv
-     source venv/bin/activate
-     ```
-
-3. **Install dependencies**:
-   ```bash
-   pip install -r requirements.txt
+2. **Activate Python virtual environment**:
+   ```cmd
+   venv\Scripts\activate.bat
    ```
 
-4. **Start the FastAPI backend server**:
+3. **Start FastAPI server**:
    ```bash
    python main.py
    ```
-   The backend server will run at **`http://127.0.0.1:8000`**.
-
----
+   The server runs at **`http://127.0.0.1:8000`**.
 
 ### 2. Frontend Setup
 
@@ -188,59 +195,21 @@ graph TD
    cd frontend
    ```
 
-2. **Install Node modules**:
-   ```bash
-   npm install
-   ```
-
-3. **Start the Vite development server**:
+2. **Start Vite development server**:
    ```bash
    npm run dev
    ```
-   The frontend application will be hosted at **`http://localhost:5173`**.
+   The frontend runs at **`http://localhost:5173`**.
 
 ---
 
 ## 🧪 Automated Verification & Test Suite
 
-To verify database schema creation, multi-tenant workspace provisioning, bcrypt authentication, analytics aggregations, Random Forest ML training, and decision engine calculations, run the verification test suite:
+To verify database schema creation, multi-tenant workspace provisioning, bcrypt authentication, analytics aggregations, Random Forest ML training, and decision engine calculations:
 
 ```bash
 # Inside backend directory with active virtual environment:
 python test_backend.py
-```
-
-Expected output:
-```text
-=========================================
-STAGING MARKETPULSE AI BACKEND VERIFICATION
-=========================================
-1. Initializing DB and creating tables...
-[SUCCESS] DB Schema created with Multi-Tenant & Governance tables.
-
-2. Testing Multi-Tenant Provisioning & Password Hashing...
-[SUCCESS] Created Org ID=1, Workspace ID=1, User ID=1, Role=OWNER
-[SUCCESS] Password authentication verified with bcrypt.
-
-3. Seeding Campaign Data (~900 items)...
-[SUCCESS] Seeded 900 campaigns in DB.
-
-4. Calculating KPIs & Chart aggregations...
-[SUCCESS] KPIs calculated successfully.
-[SUCCESS] Charts datasets created successfully.
-
-5. Training Random Forest Regressor Model...
-[SUCCESS] Model successfully trained and saved.
-
-6. Running Campaign Success Simulation...
-[SUCCESS] Simulation predict query succeeded.
-
-7. Generating account optimization advice...
-[SUCCESS] Recommendations compiled.
-
-=========================================
-ALL ENTERPRISE BACKEND PIPELINES VERIFIED SUCCESSFULLY!
-=========================================
 ```
 
 ---
