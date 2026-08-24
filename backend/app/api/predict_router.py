@@ -75,6 +75,7 @@ def run_prediction(
         hour=prediction_in.hour,
         predicted_roi=pred_roi,
         success_score=success_score,
+        expected_ctr=pred_ctr,
         expected_conversion_rate=pred_cvr,
         recommendations=recommendations_str
     )
